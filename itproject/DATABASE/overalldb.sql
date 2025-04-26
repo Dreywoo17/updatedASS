@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2025 at 03:31 PM
+-- Generation Time: Apr 26, 2025 at 04:32 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -66,14 +66,6 @@ CREATE TABLE `appointmentdb` (
   `student_email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `appointmentdb`
---
-
-INSERT INTO `appointmentdb` (`ID`, `student_ID`, `student_name`, `teacher_name`, `department_name`, `section`, `appointment_date`, `Description`, `Status`, `user_ID`, `user_type`, `Cancellation_Remark`, `Completion_Remark`, `student_email`) VALUES
-(64, '', 'Andriemer S. Bonggo', 'lawas', 'Education', 'B', '2025-04-30 21:31:00', 'I am struggling with my project', 'Completed', 0, 'student', NULL, 'Session complete. He\'s now moving to the next project phase', 'andriemer@g.cu.edu.ph'),
-(65, '', 'Andriemer S. Bonggo', 'drey', 'Maritime Education', 'B', '2025-04-30 21:31:00', 'I left behind on one topic. Can you help me sir?', 'Cancelled', 0, 'student', 'Im sorry. I might be busy right now.', NULL, 'andriemer@g.cu.edu.ph');
-
 -- --------------------------------------------------------
 
 --
@@ -122,7 +114,8 @@ CREATE TABLE `students` (
 INSERT INTO `students` (`student_id`, `student_name`, `student_email`, `user_password`, `department_name`, `profile_image`, `registration_date`) VALUES
 (1, '1', '1@g.cu.edu.ph', '$2y$10$7uiyf6spvT.MqkjW9.W4WOZBrxSIrPd77k5iPHPgU5OGve9aNQ96K', 'Computer Studies', 'uploads/1__y4BSlczZSLCkyOmCMC1Yw.png', '2025-04-21 12:48:54'),
 (2, 'brandon', '2@g.cu.edu.ph', '$2y$10$fC.q3wjv9wSARtLCKbjfQeTPa0cFACjTOH0o5e/n259X4Go7H1QZW', 'Education', '', '2025-04-21 12:49:07'),
-(4, 'Andriemer S. Bonggo', 'andriemer@g.cu.edu.ph', '$2y$10$rhxnphp.CWZDmgjTtune.uVkgrh9rInffIwuw.SMkpoqdPZLkWEZK', 'Computer Studies', '', '2025-04-23 11:47:56');
+(4, 'Andriemer S. Bonggo', 'andriemer@g.cu.edu.ph', '$2y$10$rhxnphp.CWZDmgjTtune.uVkgrh9rInffIwuw.SMkpoqdPZLkWEZK', 'Computer Studies', '', '2025-04-23 11:47:56'),
+(5, 'Jeon Wonwoo', 'Jeon@g.cu.edu.ph', '$2y$10$q0mb1llZfs/o2fBRnjs8uOM0GHTR5G8YH./12eD67OYnvTVY3UbgG', 'Computer Studies', 'uploads/profile.jpg', '2025-04-26 13:44:39');
 
 -- --------------------------------------------------------
 
@@ -221,7 +214,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `appointmentdb`
 --
 ALTER TABLE `appointmentdb`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -233,7 +226,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `teacher`
