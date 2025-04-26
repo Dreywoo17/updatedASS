@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Define user types and their corresponding tables
     $user_types = [
-        "Student" => ["table" => "students", "email_col" => "student_email", "redirect" => "/itproject/Login/Students/addappoint.php", "id_col" => "student_id", "name_col" => "student_name"],
+        "Student" => ["table" => "students", "email_col" => "student_email", "redirect" => "/itproject/Login/Students/addappoint.php", "email_col" => "student_email", "name_col" => "student_name"],
         "Teacher" => ["table" => "teacher", "email_col" => "teacher_email", "redirect" => "/itproject/Login/Teacher/teacher.php", "name_col" => "teacher_name"],
         "Admin" => ["table" => "admin", "email_col" => "admin_email", "redirect" => "/itproject/Admin/viewadmin.php"]
     ];
@@ -48,21 +48,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user = $result->fetch_assoc();
 
             // Debugging: Print the $user array to verify column names
-            var_dump($user);  // Check the fetched data structure
+            // var_dump($user);  // Remove this line after debugging
 
             // Verify password
             if (password_verify($password, $user['user_password'])) {
                 // Store user details in session
-                $_SESSION['user_id'] = $user['id'];  // Store user ID in session
+                $_SESSION['user_id'] = $user[$data['id_col']];
                 $_SESSION['user_type'] = $type;  // Store user type (Student, Teacher, Admin)
 
                 // Store student or teacher info in session
                 if ($type == "Teacher") {
                     $_SESSION['teacher_name'] = $user[$data['name_col']];
                 } elseif ($type == "Student") {
-                    // Adjust this based on the correct column name
-                    $_SESSION['student_id'] = $user[$data['id_col']];  // Correct the student ID column name if needed
-                    $_SESSION['student_name'] = $user[$data['name_col']];  // Store the student name if needed
+                    $_SESSION['student_email'] = $user[$data['email_col']];
+                    $_SESSION['student_name'] = $user[$data['name_col']];
                 } elseif ($type == "Admin") {
                     $_SESSION['admin_id'] = $user['admin_id'];
                 }

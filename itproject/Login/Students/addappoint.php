@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'Student') {
     exit();
 }
 
-$studentID = $_SESSION['student_id'] ?? null;
+$studentEmail = $_SESSION['student_email'] ?? null; // Fetch the student email from session
 
 // Fetch instructors and handle submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_message = "All fields are required.";
         } else {
             $appointment_datetime = $date . " " . $time . ":00";
-            $stmt = $conn->prepare("INSERT INTO appointmentdb (student_name, student_ID, section, appointment_date, Description, department_name, teacher_name, Status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending')");
+            $stmt = $conn->prepare("INSERT INTO appointmentdb (student_name, student_email, section, appointment_date, Description, department_name, teacher_name, Status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending')");
             $stmt->bind_param("sssssss", $name, $id, $section, $appointment_datetime, $description, $department, $teacher);
             if ($stmt->execute()) {
                 $success_message = "Appointment added successfully!";
@@ -53,9 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Always refresh appointments AFTER insert or fetch
-if ($studentID) {
-    $stmt = $conn->prepare("SELECT * FROM appointmentdb WHERE student_ID = ? ORDER BY appointment_date DESC");
-    $stmt->bind_param("i", $studentID);
+if ($studentEmail) {
+    // Fix query to use the student email correctly
+    $stmt = $conn->prepare("SELECT * FROM appointmentdb WHERE student_email = ? ORDER BY appointment_date DESC");
+    $stmt->bind_param("s", $studentEmail);  // Ensure correct bind type (string)
     $stmt->execute();
     $appointments = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
@@ -163,6 +164,7 @@ $conn->close();
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Email</th>
                     <th>Section</th>
                     <th>Date</th>
                     <th>Teacher</th>
@@ -177,6 +179,7 @@ $conn->close();
                 <?php foreach ($appointments as $row): ?>
                     <tr>
                         <td><?= htmlspecialchars($row['student_name']) ?></td>
+                        <td><?= htmlspecialchars($row['student_email']) ?></td>
                         <td><?= htmlspecialchars($row['section']) ?></td>
                         <td><?= htmlspecialchars($row['appointment_date']) ?></td>
                         <td><?= htmlspecialchars($row['teacher_name']) ?></td>

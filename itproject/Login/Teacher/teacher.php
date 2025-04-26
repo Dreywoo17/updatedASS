@@ -51,7 +51,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 }
 
 // Fetch appointments
-$sql = "SELECT a.ID, a.Student_Name, a.Section, a.Appointment_Date, a.Student_ID, a.Description, a.Status, a.Cancellation_Remark, a.Completion_Remark, d.department_name 
+$sql = "SELECT a.ID, a.Student_Name, a.Section, a.Appointment_Date, a.student_email, a.Description, a.Status, a.Cancellation_Remark, a.Completion_Remark, d.department_name 
         FROM appointmentdb a 
         LEFT JOIN departments d ON a.department_name = d.department_name 
         WHERE a.teacher_name = ?";
@@ -114,7 +114,7 @@ while ($row = $result->fetch_assoc()) {
                 <tr>
                     <th>Name</th>
                     <th>Section</th>
-                    <th>Student ID</th>
+                    <th>Student Email</th>
                     <th>Date & Time</th>
                     <th>Description</th>
                     <th>Department</th> <!-- Department Column -->
@@ -126,7 +126,7 @@ while ($row = $result->fetch_assoc()) {
                     <tr>
                         <td><?= htmlspecialchars($row['Student_Name']) ?></td>
                         <td><?= htmlspecialchars($row['Section']) ?></td>
-                        <td><?= htmlspecialchars($row['Student_ID']) ?></td>
+                        <td><?= htmlspecialchars($row['student_email']) ?></td>
                         <td><?= htmlspecialchars($row['Appointment_Date']) ?></td>
                         <td><?= htmlspecialchars($row['Description']) ?></td>
                         <td><?= htmlspecialchars($row['department_name']) ?></td>
@@ -147,7 +147,7 @@ while ($row = $result->fetch_assoc()) {
                 <tr>
                     <th>Name</th>
                     <th>Section</th>
-                    <th>Student ID</th>
+                    <th>Student Email</th>
                     <th>Date & Time</th>
                     <th>Description</th>
                     <th>Department</th> <!-- Department Column -->
@@ -159,7 +159,7 @@ while ($row = $result->fetch_assoc()) {
                     <tr>
                         <td><?= htmlspecialchars($row['Student_Name']) ?></td>
                         <td><?= htmlspecialchars($row['Section']) ?></td>
-                        <td><?= htmlspecialchars($row['Student_ID']) ?></td>
+                        <td><?= htmlspecialchars($row['student_email']) ?></td>
                         <td><?= htmlspecialchars($row['Appointment_Date']) ?></td>
                         <td><?= htmlspecialchars($row['Description']) ?></td>
                         <td><?= htmlspecialchars($row['department_name']) ?></td>
@@ -179,7 +179,7 @@ while ($row = $result->fetch_assoc()) {
                 <tr>
                     <th>Name</th>
                     <th>Section</th>
-                    <th>Student ID</th>
+                    <th>Student Email</th>
                     <th>Date & Time</th>
                     <th>Description</th>
                     <th>Department</th> <!-- Department Column -->
@@ -191,7 +191,7 @@ while ($row = $result->fetch_assoc()) {
                     <tr>
                         <td><?= htmlspecialchars($row['Student_Name']) ?></td>
                         <td><?= htmlspecialchars($row['Section']) ?></td>
-                        <td><?= htmlspecialchars($row['Student_ID']) ?></td>
+                        <td><?= htmlspecialchars($row['student_email']) ?></td>
                         <td><?= htmlspecialchars($row['Appointment_Date']) ?></td>
                         <td><?= htmlspecialchars($row['Description']) ?></td>
                         <td><?= htmlspecialchars($row['department_name']) ?></td>
@@ -216,7 +216,7 @@ while ($row = $result->fetch_assoc()) {
                 <tr>
                     <th>Name</th>
                     <th>Section</th>
-                    <th>Student ID</th>
+                    <th>Student Email</th>
                     <th>Date & Time</th>
                     <th>Description</th>
                     <th>Department</th>
@@ -228,7 +228,7 @@ while ($row = $result->fetch_assoc()) {
                     <tr>
                         <td><?= htmlspecialchars($row['Student_Name']) ?></td>
                         <td><?= htmlspecialchars($row['Section']) ?></td>
-                        <td><?= htmlspecialchars($row['Student_ID']) ?></td>
+                        <td><?= htmlspecialchars($row['student_email']) ?></td>
                         <td><?= htmlspecialchars($row['Appointment_Date']) ?></td>
                         <td><?= htmlspecialchars($row['Description']) ?></td>
                         <td><?= htmlspecialchars($row['department_name']) ?></td>
