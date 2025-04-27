@@ -2,6 +2,21 @@
 session_start();
 require 'C:\xampp\htdocs\itproject\DBconnect\Accounts\Conn_overall.php';
 
+// Added this session checker to prevent access if already logged in
+if (isset($_SESSION['user_type'])) {
+    switch ($_SESSION['user_type']) {
+        case 'Admin':
+            header('Location: /itproject/Admin/viewadmin.php');
+            exit();
+        case 'Teacher':
+            header('Location: /itproject/Login/Teacher/teacher.php');
+            exit();
+        case 'Student':
+            header('Location: /itproject/Login/Students/addappoint.php');
+            exit();
+    }
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -31,9 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Define user types and their corresponding tables
     $user_types = [
-        "Student" => ["table" => "students", "email_col" => "student_email", "redirect" => "/itproject/Login/Students/addappoint.php", "email_col" => "student_email", "name_col" => "student_name"],
-        "Teacher" => ["table" => "teacher", "email_col" => "teacher_email", "redirect" => "/itproject/Login/Teacher/teacher.php", "name_col" => "teacher_name"],
-        "Admin" => ["table" => "admin", "email_col" => "admin_email", "redirect" => "/itproject/Admin/viewadmin.php"]
+        "Student" => ["table" => "students", "email_col" => "student_email", "redirect" => "/itproject/Login/Students/addappoint.php", "name_col" => "student_name", "id_col" => "student_ID"],
+        "Teacher" => ["table" => "teacher", "email_col" => "teacher_email", "redirect" => "/itproject/Login/Teacher/teacher.php", "name_col" => "teacher_name", "id_col" => "teacher_ID"],
+        "Admin" => ["table" => "admin", "email_col" => "admin_email", "redirect" => "/itproject/Admin/viewadmin.php", "id_col" => "admin_id"]
     ];
 
     // Check if the email exists in any user type table
@@ -47,16 +62,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
 
-            // Debugging: Print the $user array to verify column names
-            // var_dump($user);  // Remove this line after debugging
-
             // Verify password
             if (password_verify($password, $user['user_password'])) {
                 // Store user details in session
                 $_SESSION['user_id'] = $user[$data['id_col']];
-                $_SESSION['user_type'] = $type;  // Store user type (Student, Teacher, Admin)
+                $_SESSION['user_type'] = $type;
 
-                // Store student or teacher info in session
+                // Store specific info based on user type
                 if ($type == "Teacher") {
                     $_SESSION['teacher_name'] = $user[$data['name_col']];
                 } elseif ($type == "Student") {
@@ -66,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['admin_id'] = $user['admin_id'];
                 }
 
-                // Redirect to the appropriate page for the user type
+                // Redirect to dashboard
                 header("Location: " . $data['redirect']);
                 exit();
             } else {
@@ -83,14 +95,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login | Appointment Scheduling System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 🔥 Added cache-control meta tags -->
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         body {
             background-image: url('../img/body.jpg');

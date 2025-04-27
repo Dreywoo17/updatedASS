@@ -1,26 +1,32 @@
 <?php
-
 session_start();
 
-// Optional: Admin access check (uncomment if needed)
+// ===== Prevent caching =====
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
+header("Pragma: no-cache"); // HTTP 1.0
+header("Expires: 0"); // Proxies
+
+// ===== Check if admin is logged in =====
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'Admin') {
     header("Location: /itproject/Login/login.php");
     exit();
 }
 
-
+// ===== Database Connection =====
 require 'C:\xampp\htdocs\itproject\DBconnect\Accounts\overall.php';
 
+// ===== Fetch Students =====
 $students_query = "SELECT students.*, departments.department_name 
                    FROM students 
                    LEFT JOIN departments ON students.department_name = departments.department_name";
 
+// ===== Fetch Teachers =====
 $teachers_query = "SELECT teacher.*, departments.department_name 
                    FROM teacher 
                    LEFT JOIN departments ON teacher.department_name = departments.department_name";
 
+// ===== Fetch Admins =====
 $admins_query = "SELECT * FROM admin";
-
 
 $students_result = $conn->query($students_query);
 $teachers_result = $conn->query($teachers_query);
@@ -30,9 +36,8 @@ if (!$students_result || !$teachers_result || !$admins_result) {
     die("Error: " . $conn->error);
 }
 
-
+// ===== Get selected role from form =====
 $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
-
 ?>
 
 <!DOCTYPE html>
@@ -41,25 +46,24 @@ $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/itproject/Admin/Asset/viewadmin.css" rel="stylesheet">
     <link href="/itproject/Admin/Asset/admin.css" rel="stylesheet">
+
     <style>
         body {
             background-color: #f4f4f9;
             font-family: 'Arial', sans-serif;
             color: #333;
         }
-
         .navbar {
             background-color: #343a40;
         }
-
         .navbar-brand img {
             width: 30px;
             height: 30px;
         }
-
         .container {
             margin-top: 50px;
             background-color: #fff;
@@ -67,39 +71,33 @@ $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-
         .table img {
             border-radius: 50%;
         }
-
         .table-dark {
             background-color: #343a40;
             color: white;
         }
-
         .table th, .table td {
             vertical-align: middle;
         }
-
         .form-group label {
             font-weight: bold;
         }
-
         .btn-sm {
             padding: 5px 10px;
         }
-
         .role-select-container {
             display: flex;
             justify-content: right;
             margin-bottom: 30px;
         }
-
         .role-select-container select {
             width: 200px;
         }
     </style>
 </head>
+
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
@@ -109,11 +107,11 @@ $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link text-white" href="/itproject/Admin/registration.php">Create Account</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="/itproject/aboutus.php">About Us</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="/itproject/Login/login.php">Log Out</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/itproject/Admin/logout.php">Log Out</a></li>
         </ul>
     </div>
 </nav>
@@ -136,7 +134,7 @@ $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
         </form>
     </div>
 
-
+    <!-- Students Table -->
     <?php if ($selected_role == 'student' || $selected_role == ''): ?>
         <h4 class="mt-4">Students</h4>
         <div class="table-responsive">
@@ -158,7 +156,7 @@ $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
                                 <img src="<?= $student['profile_image'] ? $student['profile_image'] : 'default-avatar.jpg' ?>" alt="Profile Image" width="50" height="50">
                                 <?= htmlspecialchars($student['student_name']) ?>
                             </td>
-                            <td><?= htmlspecialchars($student['department_name'] ) ?></td>
+                            <td><?= htmlspecialchars($student['department_name']) ?></td>
                             <td><?= htmlspecialchars($student['student_email']) ?></td>
                             <td>
                                 <a href="/itproject/Admin/Process/edit.php?id=<?= $student['student_id'] ?>&type=student" class="btn btn-primary btn-sm">Edit</a>
@@ -171,7 +169,7 @@ $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
         </div>
     <?php endif; ?>
 
-
+    <!-- Teachers Table -->
     <?php if ($selected_role == 'teacher' || $selected_role == ''): ?>
         <h4 class="mt-4">Teachers</h4>
         <div class="table-responsive">
@@ -206,7 +204,7 @@ $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
         </div>
     <?php endif; ?>
 
-
+    <!-- Admins Table -->
     <?php if ($selected_role == 'admin' || $selected_role == ''): ?>
         <h4 class="mt-4">Admins</h4>
         <div class="table-responsive">
@@ -241,8 +239,9 @@ $selected_role = isset($_POST['role']) ? $_POST['role'] : '';
 
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
 
 </body>
 </html>

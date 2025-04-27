@@ -11,7 +11,8 @@ $instructors = [];
 $appointments = [];
 $action = $_POST['action'] ?? '';
 
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'Student') {
+// Ensure the user is logged in as a student
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'Student' || !isset($_SESSION['student_email'])) {
     header("Location: /itproject/Login/login.php");
     exit();
 }
@@ -44,12 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST['department_name']) && $action === "fetch") {
         $department_selected = mysqli_real_escape_string($conn, $_POST['department_name']);
         
-        // // Debugging: Check if department is being selected correctly
+        // Debugging: Check if department is being selected correctly
         // echo "Department selected: " . $department_selected;
         
         $query = "SELECT teacher_name FROM teacher WHERE department_name = '$department_selected'";
         
-        // // Debugging: Check if the query is correct
+        // Debugging: Check if the query is correct
         // echo "Query: " . $query;
         
         $result = $conn->query($query);
@@ -60,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $instructors[] = $row['teacher_name'];
             }
             
-            // // Debugging: Check if any instructors were found
+            // Debugging: Check if any instructors were found
             // echo "Instructors fetched: " . count($instructors);
         } else {
             // If the query fails, show an error message
@@ -106,6 +107,7 @@ if (isset($studentEmail)) {
 $conn->close();
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,7 +128,6 @@ $conn->close();
         <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link text-white" href="/itproject/aboutus.php">About Us</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="/itproject/Login/logout.php">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -220,7 +221,7 @@ $conn->close();
             <div class="d-grid gap-2">
                 <button type="submit" name="action" value="submit" class="btn btn-success">Add Appointment</button>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewModal">View Appointments</button>
-                <a href="http://localhost/itproject/Login/login.php" class="btn btn-danger mt-2">Logout</a>
+                <a href="/itproject/Admin/logout.php" class="btn btn-danger mt-2">Logout</a>
             </div>
         </form>
     </div>

@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link text-white" href="/itproject/aboutus.php">About Us</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="/itproject/Login/login.php">Log in</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/itproject/Admin/logout.php">Log Out</a></li>
         </ul>
     </div>
 </nav>
